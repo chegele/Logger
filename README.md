@@ -22,10 +22,10 @@ a node.js module used for logging and saving application messages and events.
 
  ## Functions
  - debug(message)   - green [year-month-day HH:MM:SS] DEBUG *message*
- - general(message) - white [year-month-day HH:MM:SS] DEBUG *message*
- - detail(message)  - black [year-month-day HH:MM:SS] DEBUG *message*
- - warning(message) - yellow [year-month-day HH:MM:SS] DEBUG *message*
- - error(message)   - red [year-month-day HH:MM:SS] DEBUG *message*
+ - general(message) - white [year-month-day HH:MM:SS] GENERAL *message*
+ - detail(message)  - black [year-month-day HH:MM:SS] DETAIL *message*
+ - warning(message) - yellow [year-month-day HH:MM:SS] WARNING *message*
+ - error(message)   - red [year-month-day HH:MM:SS] ERROR *message*
 
 ### Usage
 ```
