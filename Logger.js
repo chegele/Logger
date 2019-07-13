@@ -14,13 +14,35 @@ const black = "\x1b[30m%s" + clearColor;
 
 module.exports = class Logger {
 
+    /**
+     * @typedef Options
+     * @param {Boolean} logDebug    enables debug logging
+     * @param {Boolean} logDetail   enables detail logging
+     * @param {Boolean} logGeneral  enables general logging
+     * @param {Boolean} logWarning  enables warning logging
+     * @param {Boolean} logError    enables error logging
+     * @param {Boolean} writeLog    enables saving log messages to disk
+     * @param {String} fileName     The base name of the file to save logs under
+     * @param {String} filePath     The path log files should be saved under
+     * @param {String} fileSize     The maximum size for each log file
+     * @param {Integer} fileAge     The maximum number of days to write to one log file
+     * @param {Integer} fileCount   The maximum number log files to keep in rotation
+     */
+
+    /**
+     * Creates a new logging object using the provided options
+     * @param {Options} options An object that defines the behavior of the logger
+     */
     constructor(options) {
+
+        // Set instance properties to define which type of messages to log
         options.logDebug    ? this.logDebug = true     : this.logDebug = false
         options.logDetail   ? this.logDetail = true   : this.logDetail = false;
         options.logGeneral  ? this.logGeneral = true   : this.logGeneral = false;
         options.logWarning  ? this.logWarning = true   : this.logWarning = false;
         options.logError    ? this.logError = true     : this.logError = false;
 
+        // Check if log should be saved to disk and validate options
         this.write = false;
         if (options.writeLog) {
             if (!options.fileName) throw new Error('When writeLog is enabled, fileName must be defined.');
@@ -28,6 +50,7 @@ module.exports = class Logger {
             if (!options.fileSize) throw new Error('When writeLog is enabled, fileSize must be defined.');
             if (!options.fileAge)  throw new Error('When writeLog is enabled, fileAge must be defined.');
 
+            // Create the rotating file system write stream
             this.write = true;
             this.stream = rfs(options.fileName, {
                 path: options.filePath,
@@ -38,6 +61,10 @@ module.exports = class Logger {
         }
     }
 
+    /**
+     * Writes the provided message to log if type is enabled in options
+     * @param {String} message The message to write to the log
+     */
     detail(message) {
         if (this.logDetail) {
             const label = 'DETAIL ';
@@ -48,6 +75,10 @@ module.exports = class Logger {
         }
     }
     
+    /**
+     * Writes the provided message to log if type is enabled in options
+     * @param {String} message The message to write to the log
+     */
     general(message) {
         if (this.logGeneral) {
             const label = 'GENERAL';
@@ -58,6 +89,10 @@ module.exports = class Logger {
         }
     }
     
+    /**
+     * Writes the provided message to log if type is enabled in options
+     * @param {String} message The message to write to the log
+     */
     warning(message) {
         if (this.logWarning) {
             const label = 'WARNING';
@@ -68,6 +103,10 @@ module.exports = class Logger {
         }
     }
     
+    /**
+     * Writes the provided message to log if type is enabled in options
+     * @param {String} message The message to write to the log
+     */
     error(message) {
         if (this.logError) {
             const label = 'ERROR  ';
@@ -78,6 +117,10 @@ module.exports = class Logger {
         }
     }
     
+    /**
+     * Writes the provided message to log if type is enabled in options
+     * @param {String} message The message to write to the log
+     */
     debug(message) {
         if (this.logDebug) {
             const label = 'DEBUG  ';
