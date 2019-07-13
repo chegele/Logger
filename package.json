@@ -1,0 +1,23 @@
+{
+  "name": "logger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Logger.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chegele/Logger.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/chegele/Logger/issues"
+  },
+  "homepage": "https://github.com/chegele/Logger#readme",
+  "dependencies": {
+    "rotating-file-stream": "^1.4.2"
+  }
+}
