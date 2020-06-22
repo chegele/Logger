@@ -21,10 +21,11 @@ module.exports = class Logger {
      * @param {Boolean} logGeneral  enables general logging
      * @param {Boolean} logWarning  enables warning logging
      * @param {Boolean} logError    enables error logging
+     * @param {String}  prefix      Prefix each logged message with this string
      * @param {Boolean} writeLog    enables saving log messages to disk
-     * @param {String} fileName     The base name of the file to save logs under
-     * @param {String} filePath     The path log files should be saved under
-     * @param {String} fileSize     The maximum size for each log file
+     * @param {String}  fileName    The base name of the file to save logs under
+     * @param {String}  filePath    The path log files should be saved under
+     * @param {String}  fileSize    The maximum size for each log file
      * @param {Integer} fileAge     The maximum number of days to write to one log file
      * @param {Integer} fileCount   The maximum number log files to keep in rotation
      */
@@ -41,6 +42,9 @@ module.exports = class Logger {
         options.logGeneral  ? this.logGeneral = true   : this.logGeneral = false;
         options.logWarning  ? this.logWarning = true   : this.logWarning = false;
         options.logError    ? this.logError = true     : this.logError = false;
+
+        // Configure the logging prefix
+        options.prefix ? this.prefix = ' ' + options.prefix : this.prefix = '';
 
         // Check if log should be saved to disk and validate options
         this.write = false;
@@ -63,71 +67,78 @@ module.exports = class Logger {
 
     /**
      * Writes the provided message to log if type is enabled in options
-     * @param {String} message The message to write to the log
+     * @param {String | Object} message The message to write to the log
      */
     detail(message) {
         if (this.logDetail) {
+            if (typeof(message) == 'object') message = JSON.stringify(message);
             const label = 'DETAIL ';
             const color = black;
             const time = '[' + new Date().toLocaleString() + '] ';
-            console.log(color, time + label, message);
-            if(this.write) this.stream.write(time + label + ' ' + message + os.EOL);
+            console.log(color, time + label + this.prefix, message);
+            if(this.write) this.stream.write(time + label + this.prefix + message + os.EOL);
         }
     }
     
     /**
      * Writes the provided message to log if type is enabled in options
-     * @param {String} message The message to write to the log
+     * @param {String | Object} message The message to write to the log
      */
     general(message) {
         if (this.logGeneral) {
+            if (typeof(message) == 'object') message = JSON.stringify(message);
             const label = 'GENERAL';
             const color = white;
             const time = '[' + new Date().toLocaleString() + '] ';
-            console.log(color, time + label, message);
-            if(this.write) this.stream.write(time + label + ' ' + message + os.EOL);
+            console.log(color, time + label + this.prefix, message);
+            if(this.write) this.stream.write(time + label + this.prefix + message + os.EOL);
         }
     }
     
     /**
      * Writes the provided message to log if type is enabled in options
-     * @param {String} message The message to write to the log
+     * @param {String | Object} message The message to write to the log
      */
     warning(message) {
         if (this.logWarning) {
+            if (typeof(message) == 'object') message = JSON.stringify(message);
             const label = 'WARNING';
             const color = yellow
             const time = '[' + new Date().toLocaleString() + '] ';
-            console.log(color, time + label, message);
-            if(this.write) this.stream.write(time + label + ' ' + message + os.EOL);
+            console.log(color, time + label + this.prefix, message);
+            if(this.write) this.stream.write(time + label + this.prefix + message + os.EOL);
         }
     }
     
     /**
      * Writes the provided message to log if type is enabled in options
-     * @param {String} message The message to write to the log
+     * @param {String | Object | Error} message The message to write to the log
+     * @param {Boolean} [trace] Print the stack trace to the log
      */
-    error(message) {
+    error(message, trace) {
         if (this.logError) {
+            if (typeof(message) == 'object' && !(message instanceof Error)) message = JSON.stringify(message);
+            if (trace && message instanceof Error) message = message.stack;
             const label = 'ERROR  ';
             const color = red
             const time = '[' + new Date().toLocaleString() + '] ';
-            console.log(color, time + label, message);
-            if(this.write) this.stream.write(time + label + ' ' + message + os.EOL);
+            console.log(color, time + label + this.prefix, message);
+            if(this.write) this.stream.write(time + label + this.prefix + message + os.EOL);
         }
     }
     
     /**
      * Writes the provided message to log if type is enabled in options
-     * @param {String} message The message to write to the log
+     * @param {String | Object} message The message to write to the log
      */
     debug(message) {
         if (this.logDebug) {
+            if (typeof(message) == 'object') message = JSON.stringify(message);
             const label = 'DEBUG  ';
             const color = green;
             const time = '[' + new Date().toLocaleString() + '] ';
-            console.log(color, time + label, message);
-            if(this.write) this.stream.write(time + label + ' ' + message + os.EOL);
+            console.log(color, time + label + this.prefix, message);
+            if(this.write) this.stream.write(time + label + this.prefix + message + os.EOL);
         }
     }
 
